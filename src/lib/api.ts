@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://cyber-sooty-pi.vercel.app';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://cyber-one-virid.vercel.app';
 
 interface ApiResponse<T> {
   data?: T;
