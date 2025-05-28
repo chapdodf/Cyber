@@ -56,8 +56,8 @@ export default function Carrinho() {
         throw new Error(data.error || 'Erro ao processar pagamento');
       }
 
-      // Redirecionar para a URL de checkout do Stripe
-      window.location.href = data.url;
+      // Redirecionar para a página de PIX
+      window.location.href = `/pix/${data.orderId}`;
     } catch (err) {
       console.error('Erro no checkout:', err);
       setError(err instanceof Error ? err.message : 'Erro ao processar pagamento');
