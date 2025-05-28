@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `produto` ADD COLUMN `status` VARCHAR(191) NOT NULL DEFAULT 'ATIVO';
