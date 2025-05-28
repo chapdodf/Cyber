@@ -36,6 +36,7 @@ export default function LoginPage() {
   ]);
   const router = useRouter();
   const loginCtx = useAuth();
+  const [loginField, setLoginField] = useState("");
 
   useEffect(() => {
     if (loginCtx.isAuthenticated) {
@@ -44,7 +45,7 @@ export default function LoginPage() {
   }, [loginCtx.isAuthenticated, loginCtx.user?.isAdmin, router]);
 
   const handleLogin = async () => {
-    if (!username || !password) {
+    if (!loginField || !password) {
       setError("Por favor, preencha todos os campos");
       return;
     }
@@ -53,7 +54,13 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const response = await ApiService.login(username, password);
+      let loginPayload: any = { password };
+      if (loginField.includes("@")) {
+        loginPayload.email = loginField;
+      } else {
+        loginPayload.username = loginField;
+      }
+      const response = await ApiService.login(loginPayload);
 
       if (response.error) {
         setError(response.error);
@@ -146,10 +153,10 @@ export default function LoginPage() {
             >
               <input
                 type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={loginField}
+                onChange={(e) => setLoginField(e.target.value)}
                 className="w-full bg-[#181828]/90 border-2 border-[#39ff14] rounded-lg px-4 py-3 text-[#39ff14] placeholder-[#39ff14]/50 focus:outline-none focus:ring-2 focus:ring-[#39ff14] transition-all duration-200 shadow focus:shadow-neon-green text-lg"
-                placeholder="Username"
+                placeholder="Username ou E-mail"
                 disabled={isLoading}
                 autoFocus
               />

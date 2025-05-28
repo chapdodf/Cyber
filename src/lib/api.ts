@@ -11,20 +11,19 @@ class ApiService {
       'Content-Type': 'application/json',
     };
 
-    if (!token) {
-      throw new Error('Token não fornecido');
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
     }
 
-    headers['Authorization'] = `Bearer ${token}`;
     return headers;
   }
 
-  static async login(username: string, password: string): Promise<ApiResponse<any>> {
+  static async login(payload: { username?: string; email?: string; password: string }): Promise<ApiResponse<any>> {
     try {
       const response = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
-        headers: this.getHeaders(),
-        body: JSON.stringify({ username, password }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
