@@ -1,11 +1,11 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 
 export async function GET(
-  request: Request,
-  context: { params: { orderId: string } }
+  request: NextRequest,
+  { params }: { params: { orderId: string } }
 ) {
   try {
-    const { orderId } = context.params;
+    const { orderId } = params;
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/pix/${orderId}`,
       {
