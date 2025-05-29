@@ -60,21 +60,24 @@ export default function LoginPage() {
       } else {
         loginPayload.username = loginField;
       }
+
+      console.log('Enviando payload de login:', loginPayload);
       const response = await ApiService.login(loginPayload);
 
-      if (response.error) {
-        setError(response.error);
+      if (!response.success) {
+        setError(response.error || "Erro ao fazer login");
         return;
       }
 
       if (response.data) {
+        console.log('Login bem sucedido, dados recebidos:', response.data);
         loginCtx.login(response.data);
         setOutput(prev => [...prev, "Login realizado com sucesso!"]);
         router.push(response.data.isAdmin ? "/admin" : "/");
       }
     } catch (error) {
-      setError("Erro ao fazer login. Tente novamente.");
       console.error("Erro no login:", error);
+      setError("Erro ao fazer login. Tente novamente.");
     } finally {
       setIsLoading(false);
     }

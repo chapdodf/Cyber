@@ -30,7 +30,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const saved = localStorage.getItem("cyber_user");
+    const saved = localStorage.getItem("token");
     if (saved) {
       try {
         const parsedUser = JSON.parse(saved);
@@ -38,11 +38,11 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
         if (parsedUser && parsedUser.token) {
           setUser(parsedUser);
         } else {
-          localStorage.removeItem("cyber_user");
+          localStorage.removeItem("token");
         }
       } catch (error) {
         console.error("Erro ao carregar usuário do localStorage:", error);
-        localStorage.removeItem("cyber_user");
+        localStorage.removeItem("token");
       }
     }
     setIsLoading(false);
@@ -54,7 +54,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
         throw new Error("Token não fornecido");
       }
       setUser(userData);
-      localStorage.setItem("cyber_user", JSON.stringify(userData));
+      localStorage.setItem("token", JSON.stringify(userData));
     } catch (error) {
       console.error("Erro ao salvar usuário:", error);
       throw error;
@@ -64,7 +64,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
   const logout = () => {
     try {
       setUser(null);
-      localStorage.removeItem("cyber_user");
+      localStorage.removeItem("token");
     } catch (error) {
       console.error("Erro ao fazer logout:", error);
     }

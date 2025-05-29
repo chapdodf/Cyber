@@ -3,6 +3,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://cyber-one-virid.verc
 interface ApiResponse<T> {
   data?: T;
   error?: string;
+  success?: boolean;
 }
 
 class ApiService {
@@ -20,6 +21,7 @@ class ApiService {
 
   static async login(payload: { username?: string; email?: string; password: string }): Promise<ApiResponse<any>> {
     try {
+      console.log('Tentando login com payload:', payload);
       const response = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -29,13 +31,15 @@ class ApiService {
       const data = await response.json();
 
       if (!response.ok) {
-        return { error: data.error || 'Erro ao fazer login' };
+        console.error('Erro na resposta do login:', data);
+        return { success: false, error: data.error || 'Erro ao fazer login' };
       }
 
-      return { data };
+      console.log('Login bem sucedido:', data);
+      return { success: true, data };
     } catch (error) {
       console.error('Erro no login:', error);
-      return { error: 'Erro ao conectar com o servidor' };
+      return { success: false, error: 'Erro ao conectar com o servidor' };
     }
   }
 
