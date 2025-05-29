@@ -2,11 +2,12 @@ import { NextResponse } from 'next/server';
 
 export async function GET(
   request: Request,
-  { params }: { params: { orderId: string } }
+  context: { params: { orderId: string } }
 ) {
   try {
+    const { orderId } = context.params;
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/pix/${params.orderId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/pix/${orderId}`,
       {
         headers: {
           'Content-Type': 'application/json',
