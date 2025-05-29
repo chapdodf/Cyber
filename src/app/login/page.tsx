@@ -8,7 +8,7 @@ import BackgroundEffects from "@/components/BackgroundEffects";
 import "../login/styles.css";
 
 export default function LoginPage() {
-  const [username, setUsername] = useState("");
+  const [loginField, setLoginField] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -34,12 +34,13 @@ export default function LoginPage() {
     "",
     "",
   ]);
+
   const router = useRouter();
   const loginCtx = useAuth();
-  const [loginField, setLoginField] = useState("");
 
   useEffect(() => {
     if (loginCtx.isAuthenticated) {
+      console.log('Login - Usuário já autenticado, redirecionando...');
       router.push(loginCtx.user?.isAdmin ? "/admin" : "/");
     }
   }, [loginCtx.isAuthenticated, loginCtx.user?.isAdmin, router]);
@@ -61,16 +62,20 @@ export default function LoginPage() {
         loginPayload.username = loginField;
       }
 
-      console.log('Enviando payload de login:', loginPayload);
+      console.log('Login - Iniciando processo de login');
+      console.log('Login - Enviando payload:', loginPayload);
+
       const response = await ApiService.login(loginPayload);
 
       if (!response.success) {
+        console.error('Login - Erro na resposta:', response.error);
         setError(response.error || "Erro ao fazer login");
         return;
       }
 
       if (response.data) {
-        console.log('Login bem sucedido, dados recebidos:', response.data);
+        console.log('Login - Dados recebidos do servidor:', response.data);
+        
         const userData = {
           id: response.data.id,
           username: response.data.username,
@@ -78,12 +83,15 @@ export default function LoginPage() {
           isAdmin: response.data.isAdmin,
           token: response.data.token
         };
+
+        console.log('Login - Dados formatados para AuthProvider:', userData);
         loginCtx.login(userData);
+        
         setOutput(prev => [...prev, "Login realizado com sucesso!"]);
         router.push(response.data.isAdmin ? "/admin" : "/");
       }
     } catch (error) {
-      console.error("Erro no login:", error);
+      console.error("Login - Erro no processo:", error);
       setError("Erro ao fazer login. Tente novamente.");
     } finally {
       setIsLoading(false);

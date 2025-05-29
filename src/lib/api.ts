@@ -3,7 +3,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://cyber-one-virid.verc
 interface ApiResponse<T> {
   data?: T;
   error?: string;
-  success?: boolean;
+  success: boolean;
 }
 
 class ApiService {
@@ -21,7 +21,8 @@ class ApiService {
 
   static async login(payload: { username?: string; email?: string; password: string }): Promise<ApiResponse<any>> {
     try {
-      console.log('Tentando login com payload:', payload);
+      console.log('ApiService - Iniciando login com payload:', payload);
+      
       const response = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
         headers: {
@@ -31,18 +32,27 @@ class ApiService {
       });
 
       const data = await response.json();
-      console.log('Resposta do servidor:', data);
+      console.log('ApiService - Resposta do servidor:', data);
 
       if (!response.ok) {
-        console.error('Erro na resposta do login:', data);
-        return { success: false, error: data.error || 'Erro ao fazer login' };
+        console.error('ApiService - Erro na resposta:', data);
+        return { 
+          success: false, 
+          error: data.error || 'Erro ao fazer login' 
+        };
       }
 
-      console.log('Login bem sucedido:', data);
-      return { success: true, data };
+      console.log('ApiService - Login bem sucedido');
+      return { 
+        success: true, 
+        data 
+      };
     } catch (error) {
-      console.error('Erro no login:', error);
-      return { success: false, error: 'Erro ao conectar com o servidor' };
+      console.error('ApiService - Erro na requisição:', error);
+      return { 
+        success: false, 
+        error: 'Erro ao conectar com o servidor' 
+      };
     }
   }
 
@@ -56,15 +66,15 @@ class ApiService {
 
       if (!response.ok) {
         if (response.status === 403) {
-          return { error: 'Acesso negado. Verifique suas permissões.' };
+          return { success: false, error: 'Acesso negado. Verifique suas permissões.' };
         }
-        return { error: data.error || 'Erro ao buscar estatísticas' };
+        return { success: false, error: data.error || 'Erro ao buscar estatísticas' };
       }
 
-      return { data };
+      return { success: true, data };
     } catch (error) {
       console.error('Erro ao buscar estatísticas:', error);
-      return { error: 'Erro ao conectar com o servidor' };
+      return { success: false, error: 'Erro ao conectar com o servidor' };
     }
   }
 
@@ -78,15 +88,15 @@ class ApiService {
 
       if (!response.ok) {
         if (response.status === 403) {
-          return { error: 'Acesso negado. Verifique suas permissões.' };
+          return { success: false, error: 'Acesso negado. Verifique suas permissões.' };
         }
-        return { error: data.error || 'Erro ao buscar produtos' };
+        return { success: false, error: data.error || 'Erro ao buscar produtos' };
       }
 
-      return { data };
+      return { success: true, data };
     } catch (error) {
       console.error('Erro ao buscar produtos:', error);
-      return { error: 'Erro ao conectar com o servidor' };
+      return { success: false, error: 'Erro ao conectar com o servidor' };
     }
   }
 
@@ -100,15 +110,15 @@ class ApiService {
 
       if (!response.ok) {
         if (response.status === 403) {
-          return { error: 'Acesso negado. Verifique suas permissões.' };
+          return { success: false, error: 'Acesso negado. Verifique suas permissões.' };
         }
-        return { error: data.error || 'Erro ao buscar usuários' };
+        return { success: false, error: data.error || 'Erro ao buscar usuários' };
       }
 
-      return { data };
+      return { success: true, data };
     } catch (error) {
       console.error('Erro ao buscar usuários:', error);
-      return { error: 'Erro ao conectar com o servidor' };
+      return { success: false, error: 'Erro ao conectar com o servidor' };
     }
   }
 
@@ -122,15 +132,15 @@ class ApiService {
 
       if (!response.ok) {
         if (response.status === 403) {
-          return { error: 'Acesso negado. Verifique suas permissões.' };
+          return { success: false, error: 'Acesso negado. Verifique suas permissões.' };
         }
-        return { error: data.error || 'Erro ao buscar categorias' };
+        return { success: false, error: data.error || 'Erro ao buscar categorias' };
       }
 
-      return { data };
+      return { success: true, data };
     } catch (error) {
       console.error('Erro ao buscar categorias:', error);
-      return { error: 'Erro ao conectar com o servidor' };
+      return { success: false, error: 'Erro ao conectar com o servidor' };
     }
   }
 
@@ -145,13 +155,13 @@ class ApiService {
       const data = await response.json();
 
       if (!response.ok) {
-        return { error: data.error || 'Erro ao criar categoria' };
+        return { success: false, error: data.error || 'Erro ao criar categoria' };
       }
 
-      return { data };
+      return { success: true, data };
     } catch (error) {
       console.error('Erro ao criar categoria:', error);
-      return { error: 'Erro ao conectar com o servidor' };
+      return { success: false, error: 'Erro ao conectar com o servidor' };
     }
   }
 
@@ -168,13 +178,13 @@ class ApiService {
       const data = await response.json();
 
       if (!response.ok) {
-        return { error: data.error || 'Erro ao criar produto' };
+        return { success: false, error: data.error || 'Erro ao criar produto' };
       }
 
-      return { data };
+      return { success: true, data };
     } catch (error) {
       console.error('Erro ao criar produto:', error);
-      return { error: 'Erro ao conectar com o servidor' };
+      return { success: false, error: 'Erro ao conectar com o servidor' };
     }
   }
 
@@ -188,13 +198,13 @@ class ApiService {
       const data = await response.json();
 
       if (!response.ok) {
-        return { error: data.error || 'Erro ao excluir produto' };
+        return { success: false, error: data.error || 'Erro ao excluir produto' };
       }
 
-      return { data };
+      return { success: true, data };
     } catch (error) {
       console.error('Erro ao excluir produto:', error);
-      return { error: 'Erro ao conectar com o servidor' };
+      return { success: false, error: 'Erro ao conectar com o servidor' };
     }
   }
 
@@ -209,13 +219,13 @@ class ApiService {
       const data = await response.json();
 
       if (!response.ok) {
-        return { error: data.error || 'Erro ao atualizar usuário' };
+        return { success: false, error: data.error || 'Erro ao atualizar usuário' };
       }
 
-      return { data };
+      return { success: true, data };
     } catch (error) {
       console.error('Erro ao atualizar usuário:', error);
-      return { error: 'Erro ao conectar com o servidor' };
+      return { success: false, error: 'Erro ao conectar com o servidor' };
     }
   }
 
@@ -230,13 +240,13 @@ class ApiService {
       const data = await response.json();
 
       if (!response.ok) {
-        return { error: data.error || 'Erro ao enviar e-mail' };
+        return { success: false, error: data.error || 'Erro ao enviar e-mail' };
       }
 
-      return { data };
+      return { success: true, data };
     } catch (error) {
       console.error('Erro ao enviar e-mail:', error);
-      return { error: 'Erro ao conectar com o servidor' };
+      return { success: false, error: 'Erro ao conectar com o servidor' };
     }
   }
 }
