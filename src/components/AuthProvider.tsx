@@ -53,6 +53,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
       if (!userData.token) {
         throw new Error("Token não fornecido");
       }
+      console.log('Salvando dados do usuário:', userData);
       setUser(userData);
       localStorage.setItem("token", JSON.stringify(userData));
     } catch (error) {

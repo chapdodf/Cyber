@@ -71,7 +71,14 @@ export default function LoginPage() {
 
       if (response.data) {
         console.log('Login bem sucedido, dados recebidos:', response.data);
-        loginCtx.login(response.data);
+        const userData = {
+          id: response.data.id,
+          username: response.data.username,
+          email: response.data.email,
+          isAdmin: response.data.isAdmin,
+          token: response.data.token
+        };
+        loginCtx.login(userData);
         setOutput(prev => [...prev, "Login realizado com sucesso!"]);
         router.push(response.data.isAdmin ? "/admin" : "/");
       }

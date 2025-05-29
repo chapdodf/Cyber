@@ -24,11 +24,14 @@ class ApiService {
       console.log('Tentando login com payload:', payload);
       const response = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify(payload),
       });
 
       const data = await response.json();
+      console.log('Resposta do servidor:', data);
 
       if (!response.ok) {
         console.error('Erro na resposta do login:', data);
